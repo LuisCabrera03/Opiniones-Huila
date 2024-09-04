@@ -1,0 +1,104 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+
+/* imagen de fondo home */
+.img-fluid{
+    background-image: url('./assets/iglesia.jpg');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    transform: scale(1);
+    transition: filter 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
+}
+/* organizar texto: La plata
+---Huila--- */
+
+.img-fluid h2 {
+    position: relative;
+
+    margin: 20px 0; /* Espaciado superior e inferior */
+}
+
+.img-fluid h2::before,
+.img-fluid h2::after {
+    content: '';
+    position: absolute;
+    top: 50%; /* Centrar verticalmente la línea con el texto */
+    width: 100px; /* Longitud de la línea */
+    height: 8px; /* Grosor de la línea */
+    background-color: white; /* Color de la línea */
+    transform: translateY(-50%); /* Ajustar para centrar la línea */
+    border-radius: 10px;
+}
+
+.img-fluid h2::before {
+    left: -110px; /* Posición a la izquierda */
+}
+
+.img-fluid h2::after {
+    right: -110px; /* Posición a la derecha */
+}
+
+/* container tarjetas  debe estar listo para diferentes tamaños de pantallas para que las columnas se ubiquen*/
+.container-tarjeta{
+    display: flex;
+    padding: 20px;
+    margin-bottom: 50px;
+    justify-content: center;
+    align-items: center;
+    transition: filter 0.5s ease, opacity 0.5s ease;
+    overflow: hidden;
+    transform: scale(1);
+    transition: filter 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+    z-index: 2;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+     cursor: pointer;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    
+}
+
+@media (max-width: 768px) {
+    .img-fluid {
+        font-size: 30px;
+        /* adaptar la imagen a telefonos */
+        background-size: cover;
+        height: 400px;
+    }
+
+    .img-fluid h2 {
+        font-size: 30px;
+    }
+/* adaptar el tamaño de el texto */
+
+
+}
