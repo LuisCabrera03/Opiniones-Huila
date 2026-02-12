@@ -1,0 +1,116 @@
+{
+  "places": [
+    {
+      "id": "1",
+      "name": "Parque Santander",
+      "category": "Parques",
+      "description": "Parque central de Neiva con gran importancia histórica y cultural",
+      "location": "Centro de Neiva",
+      "rating": 4.2,
+      "totalReviews": 156,
+      "image": "https://comogobierna.com/wp-content/uploads/2024/12/12.jpg",
+      "coordinates": {
+        "lat": 2.9273,
+        "lng": -75.2819
+      },
+      "amenities": ["Bancos", "Iluminación", "Seguridad", "Eventos"],
+      "createdAt": "2024-01-15T08:00:00Z",
+      "updatedAt": "2024-02-01T14:30:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Hospital Universitario",
+      "category": "Salud",
+      "description": "Principal centro de atención médica especializada del departamento",
+      "location": "Neiva, Huila",
+      "rating": 3.8,
+      "totalReviews": 89,
+      "image": "https://hospitalneiva.gov.co/wp-content/uploads/2023/11/18-1024x683.jpg",
+      "coordinates": {
+        "lat": 2.9343,
+        "lng": -75.2906
+      },
+      "amenities": ["Urgencias", "Consulta Externa", "Hospitalización", "UCI"],
+      "createdAt": "2024-01-20T10:15:00Z",
+      "updatedAt": "2024-02-05T16:45:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Universidad Surcolombiana",
+      "category": "Educación",
+      "description": "Principal institución de educación superior del sur del país",
+      "location": "Neiva, Huila",
+      "rating": 4.5,
+      "totalReviews": 234,
+      "image": "https://www.usco.edu.co/images/portada.jpg",
+      "coordinates": {
+        "lat": 2.9212,
+        "lng": -75.2899
+      },
+      "amenities": ["Biblioteca", "Cafetería", "Laboratorios", "Deportes"],
+      "createdAt": "2024-01-10T12:00:00Z",
+      "updatedAt": "2024-02-08T09:20:00Z"
+    },
+    {
+      "id": "4",
+      "name": "Terminal de Transporte",
+      "category": "Transporte",
+      "description": "Principal terminal de transporte terrestre de Neiva",
+      "location": "Neiva, Huila",
+      "rating": 3.5,
+      "totalReviews": 45,
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIYYX-5pu3PbCrA1pGY8xMGymGYa_ZWKfqNBVK254pCvCym545RqHp37riiMdfykRk-11BQs72j1Pzeq8v9Ezbj5UH5w2V7P0ZE4vQgHLwfux2VQo81y6WXJoYMlaOENw9v4Uh9TdKVIQ/s1600/TERMINAL+TRANSPORTE+AUTOBUSES+NEIVA+HUILA+COLOMBIA.jpg",
+      "coordinates": {
+        "lat": 2.9301,
+        "lng": -75.295
+      },
+      "amenities": ["Taquillas", "Salas de Espera", "Baños", "Comida Rápida"],
+      "createdAt": "2024-01-25T14:30:00Z",
+      "updatedAt": "2024-02-10T11:00:00Z"
+    },
+    {
+      "id": "5",
+      "name": "Catedral de Neiva",
+      "category": "Religión",
+      "description": "Principal iglesia católica de Neiva con arquitectura colonial",
+      "location": "Centro de Neiva",
+      "rating": 4.0,
+      "totalReviews": 120,
+      "image": "https://diocesisdeneiva.org/files/churches/images/3aadcf71-274d-4f36-87bb-2023-08-12.jpg",
+      "coordinates": {
+        "lat": 2.9278,
+        "lng": -75.2825
+      },
+      "amenities": [
+        "Misas",
+        "Confesiones",
+        "Eventos Religiosos",
+        "Visitas Guiadas"
+      ],
+      "createdAt": "2024-01-18T09:00:00Z",
+      "updatedAt": "2024-02-12T15:30:00Z"
+    },
+    {
+      "id": "6",
+      "name": "Parque de la Música",
+      "category": "Parques",
+      "description": "Espacio cultural dedicado a la música y las artes escénicas",
+      "location": "Neiva, Huila",
+      "rating": 4.3,
+      "totalReviews": 78,
+      "image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEirC4AzmOHeR0H_oaqpO-1YEN_pIGolwXUYiv59dR3MY2_hp7I8Cn4I5tQOqxFgqnEozY3KyV3MkWXaVoIA1W4aLfnnYdwXpOtR3ki_vSgsDh7v5pyksB_snq7By15WdRguaZSUxf8MU1eF/s1600/graderias-parque-de-la-musica-neiva-huila_1.JPG",
+      "coordinates": {
+        "lat": 2.925,
+        "lng": -75.288
+      },
+      "amenities": [
+        "Escenario",
+        "Zona de Picnic",
+        "Baños",
+        "Eventos Culturales"
+      ],
+      "createdAt": "2024-01-22T11:00:00Z",
+      "updatedAt": "2024-02-15T14:00:00Z"
+    }
+  ]
+}

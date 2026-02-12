@@ -1,0 +1,52 @@
+{
+  "users": [
+    {
+      "id": "user1",
+      "name": "María González",
+      "email": "maria.gonzalez@email.com",
+      "avatar": "/images/avatars/user1.jpg",
+      "joinDate": "2024-01-01T00:00:00Z",
+      "totalReviews": 15,
+      "averageRating": 4.2,
+      "level": "Reseñador Experto",
+      "verified": true,
+      "location": "Neiva, Huila"
+    },
+    {
+      "id": "user2",
+      "name": "Carlos Ramírez",
+      "email": "carlos.ramirez@email.com",
+      "avatar": "/images/avatars/user2.jpg",
+      "joinDate": "2024-01-05T00:00:00Z",
+      "totalReviews": 8,
+      "averageRating": 3.9,
+      "level": "Reseñador",
+      "verified": true,
+      "location": "Neiva, Huila"
+    },
+    {
+      "id": "user3",
+      "name": "Ana Pérez",
+      "email": "ana.perez@email.com",
+      "avatar": "/images/avatars/user3.jpg",
+      "joinDate": "2024-01-10T00:00:00Z",
+      "totalReviews": 12,
+      "averageRating": 4.1,
+      "level": "Reseñador Experto",
+      "verified": true,
+      "location": "Neiva, Huila"
+    },
+    {
+      "id": "user4",
+      "name": "Luis Martínez",
+      "email": "luis.martinez@email.com",
+      "avatar": "/images/avatars/user4.jpg",
+      "joinDate": "2024-01-15T00:00:00Z",
+      "totalReviews": 6,
+      "averageRating": 4.3,
+      "level": "Nuevo Reseñador",
+      "verified": false,
+      "location": "Neiva, Huila"
+    }
+  ]
+}

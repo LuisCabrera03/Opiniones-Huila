@@ -1,0 +1,68 @@
+{
+  "categories": [
+    {
+      "id": "parques",
+      "name": "Parques",
+      "icon": "park",
+      "color": "#4CAF50",
+      "description": "Espacios públicos y áreas verdes",
+      "totalPlaces": 25
+    },
+    {
+      "id": "salud",
+      "name": "Salud",
+      "icon": "local_hospital",
+      "color": "#F44336",
+      "description": "Hospitales, clínicas y centros de salud",
+      "totalPlaces": 18
+    },
+    {
+      "id": "educacion",
+      "name": "Educación",
+      "icon": "school",
+      "color": "#2196F3",
+      "description": "Instituciones educativas y centros de formación",
+      "totalPlaces": 32
+    },
+    {
+      "id": "restaurantes",
+      "name": "Restaurantes",
+      "icon": "restaurant",
+      "color": "#FF9800",
+      "description": "Restaurantes, cafeterías y lugares de comida",
+      "totalPlaces": 45
+    },
+    {
+      "id": "comercio",
+      "name": "Comercio",
+      "icon": "shopping_cart",
+      "color": "#9C27B0",
+      "description": "Centros comerciales y tiendas",
+      "totalPlaces": 67
+    },
+    {
+      "id": "turismo",
+      "name": "Turismo",
+      "icon": "place",
+      "color": "#607D8B",
+      "description": "Sitios turísticos y lugares de interés",
+      "totalPlaces": 23
+    },
+    {
+      "id": "transporte",
+      "name": "Transporte",
+      "icon": "directions_bus",
+      "color": "#795548",
+      "description": "Terminales, estaciones y servicios de transporte",
+      "totalPlaces": 12
+    },
+    {
+      "id": "gobierno",
+      "name": "Gobierno",
+      "icon": "account_balance",
+      "color": "#3F51B5",
+      "description": "Entidades gubernamentales y servicios públicos",
+      "totalPlaces": 15
+    }
+  ]
+}

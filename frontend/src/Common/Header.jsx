@@ -1,60 +1,22 @@
 import * as React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MenuIcon from '@mui/icons-material/Menu';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import axios from 'axios';
+import { Menu, MapPin } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { cn } from '../lib/utils';
+import { useCategories } from '../hooks/useData';
 
 const pages = ['Mis Reseñas', 'Perfil'];
 const settings = ['Perfil', '', 'Dashboard', 'Cerrar Sesión'];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem('authToken'));
-  const [categories, setCategories] = React.useState([]);
   const userName = localStorage.getItem('userName') || 'User';
-  const userRole = localStorage.getItem('role') || '1'; // Obtener el rol del usuario, por defecto '1'
+  const userRole = localStorage.getItem('role') || '1';
   const navigate = useNavigate();
   const location = useLocation();
-
-  React.useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('https://resenas-backend-20b57109bfac.herokuapp.com/api/categories');
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error al obtener las categorías:', error);
-    }
-  };
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const { categories } = useCategories();
 
   const handleLoginClick = () => {
     navigate('/login');
@@ -68,16 +30,7 @@ function ResponsiveAppBar() {
     navigate('/login');
   };
 
-  const handleMenuItemClick = (setting) => {
-    if (setting === 'Cerrar Sesión') {
-      handleLogout();
-    } else {
-      navigate(`/${setting.toLowerCase().replace(' ', '-')}`);
-    }
-    handleCloseUserMenu();
-  };
-
-  const handleNavMenuClick = (page) => {
+  const handleNavClick = (page) => {
     if (page === 'Mis Reseñas') {
       navigate('/mis-reseñas');
     } else if (page === 'Lugares') {
@@ -85,228 +38,166 @@ function ResponsiveAppBar() {
     } else if (page === 'Perfil') {
       navigate('/perfil');
     }
-    handleCloseNavMenu();
   };
 
-  const handleCategorySelect = (categoryId) => {
-    navigate(`/lugares?category=${categoryId}`);
-    handleCloseNavMenu();
+  const handleMenuItemClick = (setting) => {
+    if (setting === 'Cerrar Sesión') {
+      handleLogout();
+    } else if (setting === 'Dashboard') {
+      navigate('/dashboard');
+    } else {
+      navigate(`/${setting.toLowerCase().replace(' ', '-')}`);
+    }
   };
 
   const getInitials = (name) => {
     return name.charAt(0).toUpperCase();
   };
 
-  const stringToColor = (string) => {
-    let hash = 0;
-    let i;
-
-    for (i = 0; i < string.length; i++) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = '#';
-
-    for (i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += ('00' + value.toString(16)).substr(-2);
-    }
-
-    return color;
-  };
-
   const isHomePage = location.pathname === '/';
 
   return (
-    <AppBar
-      position="absolute"
-      sx={{
-        backgroundColor: isHomePage ? 'transparent' : '#282C34',  // Aplica un color específico
-        boxShadow: isHomePage ? 'none' : '0px 4px 10px rgba(0, 0, 0, 0.2)',
-        transition: 'background-color 0.3s ease, box-shadow 0.3s ease-in-out',
-        zIndex: 10,
-        '&:hover': {
-          boxShadow: isHomePage ? 'none' : '0px 4px 10px rgba(0, 0, 0, 0.3)',
-        },
-      }}
+    <header
+      className={cn(
+        "fixed top-0 w-full z-50 transition-all duration-300",
+        isHomePage
+          ? "bg-transparent shadow-none"
+          : "bg-gray-900/95 backdrop-blur-sm shadow-lg"
+      )}
     >
-      <Box sx={{ flexGrow: 1 }}>
-        <Toolbar disableGutters>
-          <LocationOnIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Reseñas Huila
-          </Typography>
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <MapPin className="h-6 w-6 text-white" />
+            <a
+              href="/"
+              className="text-white font-mono font-bold text-xl tracking-wider hover:text-gray-300 transition-colors"
+            >
+              Reseñas Huila
+            </a>
+          </div>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleNavMenuClick(page)}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-              <MenuItem>
-                <Typography textAlign="center">Categorías</Typography>
-                <Menu
-                  anchorEl={anchorElNav}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                >
-                  {categories.map((category) => (
-                    <MenuItem
-                      key={category.category_id}
-                      onClick={() => handleCategorySelect(category.category_id)}
-                    >
-                      <Typography textAlign="center">{category.name}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </MenuItem>
-            </Menu>
-          </Box>
-          <LocationOnIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Reseñas Huila
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={() => handleNavMenuClick(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                variant="ghost"
+                className="text-white hover:text-gray-300 hover:bg-white/10"
+                onClick={() => handleNavClick(page)}
               >
                 {page}
               </Button>
             ))}
-            <Button
-              onClick={handleOpenNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              Lugares
-            </Button>
-            <Menu
-              anchorEl={anchorElNav}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-            >
-              {categories.map((category) => (
-                <MenuItem
-                  key={category.category_id}
-                  onClick={() => handleCategorySelect(category.category_id)}
-                >
-                  <Typography textAlign="center">{category.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <Button variant="ghost" className="text-white hover:text-gray-300 hover:bg-white/10">
+                  Lugares
+                </Button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content className="bg-background border border-border rounded-md shadow-lg p-1 min-w-[200px]">
+                  {categories.map((category) => (
+                    <DropdownMenu.Item
+                      key={category.id}
+                      className="px-3 py-2 text-sm cursor-pointer hover:bg-accent rounded-sm"
+                      onClick={() => navigate(`/lugares?category=${category.id}`)}
+                    >
+                      {category.name}
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
+          </nav>
+
+          {/* User Section */}
+          <div className="flex items-center space-x-4">
             {!isLoggedIn ? (
-              <Button color="inherit" onClick={handleLoginClick}>
+              <Button
+                variant="outline"
+                className="text-white border-white hover:bg-white hover:text-gray-900"
+                onClick={handleLoginClick}
+              >
                 Iniciar Sesión
               </Button>
             ) : (
-              <>
-                <Tooltip title="Configuración">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      sx={{
-                        bgcolor: stringToColor(userName),
-                        color: 'white',
-                        width: 40,
-                        height: 40,
-                        fontSize: 20,
-                      }}
-                    >
-                      {getInitials(userName)}
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
+                  <button className="focus:outline-none">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {getInitials(userName)}
+                      </AvatarFallback>
                     </Avatar>
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: '45px' }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings
-                    .filter((setting) => setting !== 'Dashboard' || userRole === '2') // Mostrar Dashboard solo si el rol es 2 (Administrador)
-                    .map((setting) => (
-                      <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)}>
-                        <Typography textAlign="center">{setting}</Typography>
-                      </MenuItem>
-                    ))}
-                </Menu>
-              </>
+                  </button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content className="bg-background border border-border rounded-md shadow-lg p-1 min-w-[180px]">
+                    {settings
+                      .filter((setting) => setting !== '' && (setting !== 'Dashboard' || userRole === '2'))
+                      .map((setting) => (
+                        <DropdownMenu.Item
+                          key={setting}
+                          className="px-3 py-2 text-sm cursor-pointer hover:bg-accent rounded-sm"
+                          onClick={() => handleMenuItemClick(setting)}
+                        >
+                          {setting}
+                        </DropdownMenu.Item>
+                      ))}
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
             )}
-          </Box>
-        </Toolbar>
-      </Box>
-    </AppBar>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
+                  <Button variant="ghost" size="icon" className="text-white">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content className="bg-background border border-border rounded-md shadow-lg p-1 min-w-[200px]">
+                    {pages.map((page) => (
+                      <DropdownMenu.Item
+                        key={page}
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent rounded-sm"
+                        onClick={() => handleNavClick(page)}
+                      >
+                        {page}
+                      </DropdownMenu.Item>
+                    ))}
+                    <DropdownMenu.Separator className="my-1 h-px bg-border" />
+                    <DropdownMenu.Sub>
+                      <DropdownMenu.SubTrigger className="px-3 py-2 text-sm cursor-pointer hover:bg-accent rounded-sm">
+                        Lugares
+                      </DropdownMenu.SubTrigger>
+                      <DropdownMenu.Portal>
+                        <DropdownMenu.SubContent className="bg-background border border-border rounded-md shadow-lg p-1 min-w-[180px]">
+                          {categories.map((category) => (
+                            <DropdownMenu.Item
+                              key={category.id}
+                              className="px-3 py-2 text-sm cursor-pointer hover:bg-accent rounded-sm"
+                              onClick={() => navigate(`/lugares?category=${category.id}`)}
+                            >
+                              {category.name}
+                            </DropdownMenu.Item>
+                          ))}
+                        </DropdownMenu.SubContent>
+                      </DropdownMenu.Portal>
+                    </DropdownMenu.Sub>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
 

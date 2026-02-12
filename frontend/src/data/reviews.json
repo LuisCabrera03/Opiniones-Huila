@@ -1,0 +1,60 @@
+{
+  "reviews": [
+    {
+      "id": "1",
+      "placeId": "1",
+      "userId": "user1",
+      "rating": 5,
+      "title": "Excelente lugar para relajarse",
+      "comment": "Un parque muy bien mantenido, perfecto para caminar y disfrutar del ambiente. La iluminación nocturna es muy buena.",
+      "pros": ["Bien iluminado", "Limpio", "Seguro"],
+      "cons": ["Poco parqueadero"],
+      "createdAt": "2024-01-25T15:30:00Z",
+      "updatedAt": "2024-01-25T15:30:00Z",
+      "helpful": 12,
+      "verified": true
+    },
+    {
+      "id": "2",
+      "placeId": "1",
+      "userId": "user2",
+      "rating": 4,
+      "title": "Buen lugar histórico",
+      "comment": "Me gusta venir aquí porque tiene mucha historia. Los eventos culturales son muy buenos.",
+      "pros": ["Historia", "Eventos culturales", "Céntrico"],
+      "cons": ["Mucho ruido en horas pico"],
+      "createdAt": "2024-01-28T10:15:00Z",
+      "updatedAt": "2024-01-28T10:15:00Z",
+      "helpful": 8,
+      "verified": true
+    },
+    {
+      "id": "3",
+      "placeId": "2",
+      "userId": "user3",
+      "rating": 3,
+      "title": "Atención regular",
+      "comment": "El personal médico es competente pero los tiempos de espera son muy largos. Las instalaciones necesitan modernización.",
+      "pros": ["Personal capacitado", "Equipos especializados"],
+      "cons": ["Tiempos de espera", "Instalaciones antiguas"],
+      "createdAt": "2024-02-01T14:20:00Z",
+      "updatedAt": "2024-02-01T14:20:00Z",
+      "helpful": 15,
+      "verified": true
+    },
+    {
+      "id": "4",
+      "placeId": "3",
+      "userId": "user4",
+      "rating": 5,
+      "title": "Excelente universidad",
+      "comment": "La calidad académica es muy buena. Los profesores están muy preparados y las instalaciones son modernas.",
+      "pros": ["Calidad académica", "Buenos profesores", "Instalaciones modernas"],
+      "cons": ["Parqueadero insuficiente"],
+      "createdAt": "2024-02-03T11:45:00Z",
+      "updatedAt": "2024-02-03T11:45:00Z",
+      "helpful": 20,
+      "verified": true
+    }
+  ]
+}

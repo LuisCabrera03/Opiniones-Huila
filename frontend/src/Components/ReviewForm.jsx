@@ -1,13 +1,17 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import Rating from '@mui/material/Rating';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
+import { motion } from 'framer-motion';
+import { Send, Star as StarIcon, User } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
+import { Alert } from '../components/ui/alert';
+import { Rating } from '../Components/UI/Rating';
+import { useToast } from '../components/ui/use-toast';
+import { useAppContext } from '../context/AppContext';
+import { DataService } from '../Services/dataService';
 
 const labels = {
   0.5: 'Muy Malo',
@@ -22,94 +26,247 @@ const labels = {
   5: 'Perfecto',
 };
 
-export default function ReviewForm({ onReviewSubmit }) {
-  const { placeId } = useParams();
+export default function ReviewForm({ placeId, onReviewSubmitted }) {
+  const { placeId: paramPlaceId } = useParams();
+  const finalPlaceId = placeId || paramPlaceId;
+
   const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(-1);
-  const [comment, setComment] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [hover, setHover] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const userId = localStorage.getItem('user_id');
+  const { state } = useAppContext();
+  const { toast } = useToast();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
-    if (!userId) {
-      setError('No se encontró el ID del usuario. Por favor, asegúrate de haber iniciado sesión.');
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  };
+
+  const handleRatingHover = (hoverRating) => {
+    setHover(hoverRating);
+  };
+
+  const onSubmit = async (data) => {
+    if (!state.currentUser) {
+      toast({
+        title: "Error",
+        description: "Debes iniciar sesión para escribir una reseña.",
+        variant: "destructive"
+      });
       return;
     }
 
-    // Validación del rating
-    if (rating <= 0 || rating > 5) {
-      setError('La calificación debe estar entre 0.5 y 5.0.');
+    if (rating === 0) {
+      toast({
+        title: "Error",
+        description: "Por favor, selecciona una calificación.",
+        variant: "destructive"
+      });
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
-      const response = await axios.post(` https://resenas-backend-20b57109bfac.herokuapp.com/api/places/${placeId}/reviews`, {
-        user_id: userId,
-        rating,
-        comment,
+      const newReview = {
+        id: Date.now().toString(), // Temporary ID for local storage
+        placeId: finalPlaceId,
+        userId: state.currentUser.id,
+        userName: state.currentUser.username,
+        rating: rating,
+        comment: data.comment,
+        date: new Date().toISOString(),
+        user: {
+          username: state.currentUser.username
+        }
+      };
+
+      // Add review using DataService
+      await DataService.addReview(newReview);
+
+      // Reset form
+      reset();
+      setRating(0);
+      setHover(0);
+
+      toast({
+        title: "¡Éxito!",
+        description: "Tu reseña ha sido enviada correctamente.",
+        variant: "default"
       });
 
-      if (onReviewSubmit) {
-        onReviewSubmit(response.data);
+      // Call parent callback if provided
+      if (onReviewSubmitted) {
+        onReviewSubmitted(newReview);
       }
-      setRating(0);
-      setComment('');
-      setSuccess('Reseña enviada con éxito.');
+
     } catch (error) {
-      console.error("Error al crear la reseña:", error.message);
-      setError('Error al crear la reseña. Por favor, inténtalo nuevamente.');
+      console.error("Error al crear la reseña:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo enviar tu reseña. Inténtalo nuevamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  if (!state.currentUser) {
+    return (
+      <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm mb-8">
+        <CardContent className="text-center py-12">
+          <User className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-muted-foreground mb-2">
+            Inicia sesión para escribir una reseña
+          </h3>
+          <p className="text-muted-foreground mb-4">
+            Comparte tu experiencia con otros usuarios
+          </p>
+          <Button
+            onClick={() => window.location.href = '/login'}
+            className="bg-gradient-to-r from-blue-500 to-purple-600"
+          >
+            Iniciar Sesión
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-        Deja tu reseña
-      </Typography>
-      {error && (
-        <Stack sx={{ width: '100%', mb: 2 }} spacing={2}>
-          <Alert severity="error">{error}</Alert>
-        </Stack>
-      )}
-      {success && (
-        <Stack sx={{ width: '100%', mb: 2 }} spacing={2}>
-          <Alert severity="success">{success}</Alert>
-        </Stack>
-      )}
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Rating
-          name="rating"
-          value={rating}
-          onChange={(e, newValue) => setRating(newValue)}
-          precision={0.5}
-          onChangeActive={(event, newHover) => {
-            setHover(newHover);
-          }}
-          sx={{ mr: 2 }}
-        />
-        {rating !== null && (
-          <Typography variant="body2">{labels[hover !== -1 ? hover : rating]}</Typography>
-        )}
-      </Box>
-      <TextField
-        fullWidth
-        variant="outlined"
-        label="Comentario"
-        multiline
-        rows={4}
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <Button variant="contained" color="primary" type="submit">
-        Enviar Reseña
-      </Button>
-    </Box>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <StarIcon className="w-5 h-5 text-primary" />
+            Escribe tu reseña
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* User Info */}
+            <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-primary font-medium">
+                  {state.currentUser.username[0].toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <p className="font-medium">{state.currentUser.username}</p>
+                <p className="text-sm text-muted-foreground">
+                  Escribiendo como {state.currentUser.username}
+                </p>
+              </div>
+            </div>
+
+            {/* Rating Section */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">
+                Calificación *
+              </Label>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <Rating
+                  value={rating}
+                  onChange={handleRatingChange}
+                  onHover={handleRatingHover}
+                  size="lg"
+                  className="cursor-pointer"
+                />
+                <div className="text-sm text-muted-foreground">
+                  {hover > 0 || rating > 0 ? (
+                    <span className="font-medium">
+                      {labels[hover || rating]} ({hover || rating}/5)
+                    </span>
+                  ) : (
+                    'Selecciona una calificación'
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Comment Section */}
+            <div className="space-y-3">
+              <Label htmlFor="comment" className="text-base font-medium">
+                Comentario
+              </Label>
+              <Textarea
+                id="comment"
+                placeholder="Comparte tu experiencia en este lugar..."
+                rows={4}
+                className="resize-none"
+                {...register("comment", {
+                  maxLength: {
+                    value: 500,
+                    message: "El comentario no puede tener más de 500 caracteres"
+                  }
+                })}
+              />
+              {errors.comment && (
+                <p className="text-sm text-destructive">
+                  {errors.comment.message}
+                </p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button
+                type="submit"
+                disabled={isSubmitting || rating === 0}
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 flex items-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Enviar Reseña
+                  </>
+                )}
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  reset();
+                  setRating(0);
+                  setHover(0);
+                }}
+                disabled={isSubmitting}
+              >
+                Limpiar
+              </Button>
+            </div>
+
+            {/* Guidelines */}
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">
+                Pautas para reseñas
+              </h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• Sé honesto y describe tu experiencia real</li>
+                <li>• Mantén un lenguaje respetuoso</li>
+                <li>• Incluye detalles específicos que puedan ayudar a otros</li>
+              </ul>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
